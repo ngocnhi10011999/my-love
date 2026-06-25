@@ -46,6 +46,10 @@ export const translations = {
       vi: 'Tiếng Việt',
       en: 'English',
     },
+    music: {
+      mute: 'Tắt nhạc',
+      unmute: 'Bật nhạc',
+    },
   },
   en: {
     nav: {
@@ -88,6 +92,10 @@ export const translations = {
       label: 'Language',
       vi: 'Tiếng Việt',
       en: 'English',
+    },
+    music: {
+      mute: 'Mute music',
+      unmute: 'Unmute music',
     },
   },
 };

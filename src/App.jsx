@@ -10,15 +10,15 @@ export default function App() {
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-slate-800 bg-slate-900/60 backdrop-blur sticky top-0 z-10">
+      <header className="border-b border-slate-200 bg-white/80 backdrop-blur sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <div>
-            <h1 className="text-lg font-semibold">Secure Gallery</h1>
-            <p className="text-xs text-slate-400 capitalize">Signed in as {role}</p>
+            <h1 className="text-lg font-semibold text-slate-900">Secure Gallery</h1>
+            <p className="text-xs text-slate-500 capitalize">Signed in as {role}</p>
           </div>
           <button
             onClick={logout}
-            className="px-3 py-1.5 text-sm rounded-lg bg-slate-800 hover:bg-slate-700"
+            className="px-3 py-1.5 text-sm rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700"
           >
             Sign out
           </button>

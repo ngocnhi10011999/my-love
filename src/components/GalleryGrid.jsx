@@ -5,7 +5,7 @@ export default function GalleryGrid({ images, loading, error }) {
     return (
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
         {Array.from({ length: 8 }).map((_, i) => (
-          <div key={i} className="aspect-square rounded-lg bg-slate-800/60 animate-pulse" />
+          <div key={i} className="aspect-square rounded-lg bg-slate-200 animate-pulse" />
         ))}
       </div>
     );
@@ -13,7 +13,7 @@ export default function GalleryGrid({ images, loading, error }) {
 
   if (error) {
     return (
-      <div className="rounded-lg border border-rose-900 bg-rose-950/40 p-4 text-rose-300">
+      <div className="rounded-lg border border-rose-200 bg-rose-50 p-4 text-rose-700">
         Failed to load images: {error}
       </div>
     );
@@ -21,7 +21,7 @@ export default function GalleryGrid({ images, loading, error }) {
 
   if (!images.length) {
     return (
-      <div className="rounded-lg border border-slate-800 bg-slate-900/40 p-8 text-center text-slate-400">
+      <div className="rounded-lg border border-slate-200 bg-white p-8 text-center text-slate-500">
         No images yet.
       </div>
     );
@@ -36,7 +36,7 @@ export default function GalleryGrid({ images, loading, error }) {
             href={img.url}
             data-fancybox="gallery"
             data-caption={img.key}
-            className="group block aspect-square overflow-hidden rounded-lg bg-slate-800"
+            className="group block aspect-square overflow-hidden rounded-lg bg-slate-100"
           >
             <img
               src={img.url}

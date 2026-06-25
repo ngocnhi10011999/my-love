@@ -31,6 +31,23 @@ export default function App() {
         </div>
       </header>
       <main className="max-w-6xl mx-auto px-4 py-6">
+        <section className="py-12 sm:py-16 text-center">
+          <p className="text-xs uppercase tracking-[0.4em] text-rose-500 font-semibold mb-4">
+            A little corner of us
+          </p>
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-serif italic text-rose-900 leading-tight">
+            Every picture, a heartbeat.
+          </h2>
+          <p className="mt-5 max-w-xl mx-auto text-rose-700/70">
+            A quiet place to keep the moments worth remembering — soft mornings,
+            stolen smiles, the everyday tiny forevers.
+          </p>
+          <div className="mt-8 flex items-center justify-center gap-3 text-rose-300">
+            <span className="h-px w-12 bg-rose-200" />
+            <Heart className="w-4 h-4 text-rose-400" />
+            <span className="h-px w-12 bg-rose-200" />
+          </div>
+        </section>
         {role === 'admin' ? <AdminPanel /> : <GuestView />}
       </main>
       <footer className="max-w-6xl mx-auto px-4 py-6 text-center text-xs text-rose-400 flex items-center justify-center gap-1">

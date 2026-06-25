@@ -1,45 +1,46 @@
-Here is a comprehensive Project Plan tailored for a software development workflow. Since this documentation will be used for a Claude code review and subsequent implementation, it is structured with clear specifications, data flows, and task breakdowns.
+Here is the revised, frontend-only project plan utilizing **React** for the user interface, routing, and direct integration with AWS S3 and the Telegram Bot API.
 
 ---
 
-# Project Plan: Simple Secure Gallery with Fancybox & AWS S3
+# Project Plan: Simple Secure Gallery with React, Fancybox & AWS S3
 
 ## 1. Project Overview
 
-This project aims to build a lightweight, secure web application to showcase an image gallery using **Fancybox**. The application features a single password-based gate entry that differentiates between an **Admin** (who can upload images directly to AWS S3) and a **Guest** (who can only view the gallery). Additionally, Guest logins will trigger a real-time notification to a **Telegram Bot**.
+This project aims to build a lightweight, single-page application (SPA) using **React**. It features a password-gated access system that differentiates between an **Admin** and a **Guest**. The gallery is powered by the **Fancybox for React** component, rendering images fetched directly from an AWS S3 bucket.
 
 ### Tech Stack Architecture
 
-* **Backend:** Python / Django (Robust handling of S3 configurations and Telegram API requests)
-* **Frontend:** HTML5, Tailwind CSS, Vanilla JavaScript, **Fancybox v4/v5** (UI Component)
-* **Storage:** AWS S3 (Simple Storage Service)
-* **Notifications:** Telegram Bot API
+* **Framework:** React (Vite template for optimal performance)
+* **Styling:** Tailwind CSS
+* **Gallery Component:** `@fancyapps/ui` (Fancybox React Wrapper)
+* **Storage Provider:** AWS S3 (via `@aws-sdk/client-s3`)
+* **Notification Client:** Axios / Fetch API (targeting Telegram Bot API)
 
 ---
 
-## 2. System Flow & Architecture
+## 2. System Flow & Component Architecture
 
 ```
                        +-------------------+
-                       |    Gate View      |
+                       |    <GateComponent>|
                        | (Password Entry)  |
                        +---------+---------+
                                  |
-                        Submits Password
+                     Validates State & Password
                                  v
                      +-----------+-----------+
-                     |  Auth / Role Checker  |
+                     |   React Context / State|
                      +-----+- - - - - - -+---+
                            |             |
                      Matches Admin    Matches Guest
                            |             |
                            v             v
              +-------------+----+   +----+-------------+
-             |    Admin Panel   |   |   Guest View     |
+             |  <AdminPanel />  |   |  <GuestView />   |
              | (Upload & View)  |   |   (View Only)    |
              +-------------+----+   +----+-------------+
                            |             |             |
-                    Uploads to S3   Fetches URLs   Triggers Alert
+                 S3 PutObject   S3 ListObjects     HTTP POST
                            |             |             |
                            v             v             v
                      +-----+-------------+----+   +----+--------+
@@ -52,64 +53,48 @@ This project aims to build a lightweight, secure web application to showcase an 
 
 ## 3. Component Specifications
 
-### A. Authentication Logic (Hardcoded / Non-Critical)
+### A. Authentication & Routing State
 
-Since data security is non-critical, credentials can be securely managed via environment variables (`.env`) rather than a database table.
+Since this is a client-side app with non-critical security requirements, user roles will be saved directly into React state (or `localStorage` to persist across reloads).
 
-* `ADMIN_PASSWORD`: Grants access to the Upload + View interface.
-* `GUEST_PASSWORD`: Grants access to the View-only interface.
+* `process.env.REACT_APP_ADMIN_PASSWORD`: Unlocks the upload capabilities + gallery viewer.
+* `process.env.REACT_APP_GUEST_PASSWORD`: Unlocks the gallery viewer only and dispatches a silent tracking alert.
 
-### B. Storage (AWS S3)
+### B. AWS S3 Integration (Client-Side)
 
-* Images are uploaded directly to a dedicated S3 bucket.
-* The application fetches the list of object URLs from S3 to render the gallery dynamically.
+* **Read Actions:** On component mount, the app uses the AWS SDK to run `ListObjectsV2Command`, parsing image keys into structured URLs.
+* **Write Actions:** The admin panel includes a file picker input that converts images into binary streams, uploading them via `PutObjectCommand`.
+* *Note: The S3 Bucket must have Cross-Origin Resource Sharing (CORS) configured to accept requests from the React application's domain/localhost.*
 
-### C. UI Component (Fancybox)
+### C. UI Component (Fancybox for React)
 
-* Implements a clean grid layout for thumbnail previews.
-* Triggers the Fancybox lightbox component upon clicking any thumbnail, enabling smooth navigation, zooming, and full-screen slideshows.
+* Images are laid out in a responsive Tailwind grid layout.
+* We construct a reusable `<Fancybox>` wrapper component to handle the binding and clean-up lifecycle methods of the Fancybox core instances.
 
-### D. Notification System (Telegram Bot)
+### D. Telegram Notification Service
 
-* When a user successfully validates as a Guest, the backend dispatches an asynchronous `POST` request to the Telegram Bot API.
-* **Message Template:** `🔔 Notification: A guest has logged in to view the photo gallery at [Timestamp].`
+* Upon successful validation of the Guest password, a direct `fetch` request is dispatched to `https://api.telegram.org/bot<token>/sendMessage` notifying the channel of a viewer entry.
 
 ---
 
-## 4. Database & Configuration Design
+## 4. Configuration & Environment Variables
 
-### Environment Variables (`.env`)
+### Environment File (`.env.local`)
 
 ```env
-# Access Control
-ADMIN_PASSWORD=admin123
-GUEST_PASSWORD=guest123
+# Credentials
+VITE_ADMIN_PASSWORD=admin123
+VITE_GUEST_PASSWORD=guest123
 
-# AWS S3 Configuration
-AWS_ACCESS_KEY_ID=your_aws_access_key
-AWS_SECRET_ACCESS_KEY=your_aws_secret_key
-AWS_STORAGE_BUCKET_NAME=your_gallery_bucket_name
-AWS_S3_REGION_NAME=ap-southeast-1
+# AWS Credentials (Ensure IAM policy is highly restricted to this bucket only)
+VITE_AWS_ACCESS_KEY_ID=your_access_key
+VITE_AWS_SECRET_ACCESS_KEY=your_secret_key
+VITE_AWS_REGION=ap-southeast-1
+VITE_AWS_S3_BUCKET=your_gallery_bucket_name
 
-# Telegram Notification Configuration
-TELEGRAM_BOT_TOKEN=your_bot_token
-TELEGRAM_CHAT_ID=your_channel_or_chat_id
-
-```
-
-### Django Models (Optional/Minimal)
-
-If tracking metadata (like upload timestamps or custom titles) is preferred, use this minimal model. Otherwise, the app can read directly from the S3 bucket.
-
-```python
-from django.db import models
-
-class GalleryImage(models.Model):
-    image_url = models.URLField(max_index_length=500)
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ['-uploaded_at']
+# Telegram Configuration
+VITE_TELEGRAM_BOT_TOKEN=your_bot_token
+VITE_TELEGRAM_CHAT_ID=your_chat_id
 
 ```
 
@@ -117,67 +102,74 @@ class GalleryImage(models.Model):
 
 ## 5. Implementation Roadmap (Task Breakdown)
 
-### Phase 1: Environment Setup & Project Initialization
+### Phase 1: Initial Setup
 
-* [ ] Initialize Django project and application layout.
-* [ ] Configure `settings.py` to parse environment variables using `django-environ`.
-* [ ] Install dependencies: `boto3`, `requests`, `django-storages` (optional, or write a custom S3 utility).
-
-### Phase 2: Authentication & Gate View
-
-* [ ] Create `GateView` containing a single password input field.
-* [ ] Implement backend validation logic:
-* If input matches `ADMIN_PASSWORD` $\rightarrow$ Set session key `role = 'admin'` $\rightarrow$ Redirect to `/gallery/`.
-* If input matches `GUEST_PASSWORD` $\rightarrow$ Set session key `role = 'guest'` $\rightarrow$ Trigger Telegram Alert service $\rightarrow$ Redirect to `/gallery/`.
-* Else $\rightarrow$ Return validation error.
-
-
-
-### Phase 3: Telegram Alert Service
-
-* [ ] Create a utility function `send_telegram_notification()`.
-* [ ] Use `requests.post` to hit `https://api.telegram.org/bot<token>/sendMessage`.
-
-### Phase 4: AWS S3 Core Services
-
-* [ ] Create an `S3Service` class using `boto3` to handle:
-* `upload_image(file)`: Uploads image to S3 and returns the public URL.
-* `list_images()`: Fetches all image URLs from the bucket.
-
-
-
-### Phase 5: Frontend Gallery & Fancybox Integration
-
-* [ ] Build the unified `/gallery/` view contextually driven by the session `role`.
-* **Admin Mode:** Renders a drag-and-drop file upload form + Image Grid.
-* **Guest Mode:** Renders *only* the Image Grid.
-
-
-* [ ] Include Fancybox CDN links in the HTML base header:
-```html
-<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+* [ ] Scaffold the project using Vite: `npm create vite@latest secure-gallery -- --template react`.
+* [ ] Install target dependencies:
+```bash
+npm install @fancyapps/ui @aws-sdk/client-s3 tailwindcss postcss autoprefixer
 
 ```
 
 
-* [ ] Initialize Fancybox markup syntax within the template:
-```html
-<a href="{{ image.image_url }}" data-fancybox="gallery" data-caption="Uploaded at {{ image.uploaded_at }}">
-  <img src="{{ image.image_url }}" class="w-full h-48 object-cover rounded" />
-</a>
+* [ ] Set up Tailwind CSS configurations.
+
+### Phase 2: State Management & Gate View
+
+* [ ] Create an `AuthContext` to manage the logged-in user state (`null`, `'guest'`, or `'admin'`).
+* [ ] Build the `<Gate />` interface containing the password entry lock screens.
+* [ ] Implement submission checks mapping passwords to their respective `.env` environment tokens.
+
+### Phase 3: Telemetry & API Calls
+
+* [ ] Write a `triggerTelegramAlert()` utility using native Fetch APIs.
+* [ ] Tie this trigger into the successful execution block of the Guest login sequence.
+
+### Phase 4: S3 Integration Engine
+
+* [ ] Initialize the `S3Client` instance with the client-side credentials.
+* [ ] Create an asynchronous helper function `fetchGalleryImages()` to poll the S3 endpoint and array-map target asset URLs.
+* [ ] Create an `uploadImageToS3(file)` wrapper utility for the Admin control block.
+
+### Phase 5: Fancybox Gallery Wrapper & UI Assembly
+
+* [ ] Code the standard React Declarative Wrapper for Fancybox:
+```jsx
+import React, { useEffect, useRef } from "react";
+import { Fancybox as NativeFancybox } from "@fancyapps/ui";
+import "@fancyapps/ui/dist/fancybox/fancybox.css";
+
+function Fancybox(props) {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    const delegate = props.delegate || "[data-fancybox]";
+    const options = props.options || {};
+
+    NativeFancybox.bind(container, delegate, options);
+
+    return () => {
+      NativeFancybox.unbind(container);
+      NativeFancybox.close();
+    };
+  }, [props.delegate, props.options]);
+
+  return <div ref={containerRef}>{props.children}</div>;
+}
+export default Fancybox;
 
 ```
 
 
-* [ ] Bind initialization via JavaScript: `Fancybox.bind("[data-fancybox='gallery']", {});`.
+* [ ] Build the primary layout viewport, mapping the retrieved S3 images array down inside the custom `<Fancybox>` tags.
 
 ---
 
 ## 6. Claude Code Review Focus Areas
 
-When submitting this implementation code to Claude for review, verify the following metrics:
+When passing this JavaScript file layout to Claude for an optimization sweep, emphasize these areas:
 
-1. **Session Security:** Ensure views are protected by custom middleware or decorator checks guaranteeing that unauthenticated users cannot access `/gallery/` directly without a session role.
-2. **S3 Exception Handling:** Check if `boto3` operations fail gracefully without crashing the application thread if the AWS server becomes unreachable.
-3. **Non-blocking Request Handling:** Confirm that the Telegram notification API call does not bottleneck the page load time for the Guest user (consider utilizing a background thread or a quick timeout settings configuration).
+1. **React Lifecycle Cleanups:** Ensure `Fancybox.unbind()` is safely firing to prevent heavy DOM memory leaks during high-volume component updates.
+2. **Asynchronous UI States:** Check for proper handling of loading animations or disabled buttons while large files are uploading to AWS or during the initial asset fetch hook.
+3. **S3 CORS Issues:** Ensure clear guidance or code configurations for handling cross-origin fetch failures in the browser console.

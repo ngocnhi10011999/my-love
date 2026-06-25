@@ -40,6 +40,7 @@ export default function AdminPanel() {
       }
       await reload();
     } catch (err) {
+      console.error('Upload error:', err);
       setError(err.message);
     } finally {
       setUploading(false);

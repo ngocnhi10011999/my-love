@@ -10,7 +10,7 @@ export const translations = {
     gate: {
       eyebrow: 'Dành cho em',
       title: 'Góc Nhỏ Của Mình',
-      prompt: 'Thì thầm mật khẩu nhé.',
+      prompt: 'Thì thầm mật khẩu nhé (là ngày sinh nhật em đó).',
       passwordPlaceholder: '••••••••',
       wrongPassword: 'Mật khẩu chưa đúng',
       unlocking: 'Đang mở…',
@@ -19,8 +19,10 @@ export const translations = {
     hero: {
       eyebrow: 'Một góc nhỏ của hai đứa',
       title: 'Mỗi tấm ảnh là một nhịp tim.',
+      // subtitle:
+      // 'Một nơi yên tĩnh để lưu giữ những khoảnh khắc đáng nhớ — những buổi sáng dịu dàng, những nụ cười trộm, những điều mãi mãi bé nhỏ của đời thường.',
       subtitle:
-        'Một nơi yên tĩnh để lưu giữ những khoảnh khắc đáng nhớ — những buổi sáng dịu dàng, những nụ cười trộm, những điều mãi mãi bé nhỏ của đời thường.',
+        'Bốn năm bên nhau, tụi mình không còn những cuồng nhiệt thuở ban đầu, và những giận hờn, cãi vã cũng là điều khó tránh. Anh biết có những lúc cả hai đều cảm thấy mệt mỏi. Nhưng anh muốn em biết rằng, tình yêu anh dành cho em chưa bao giờ thay đổi. Chính vì người đó là em, nên dù có thế nào, anh vẫn luôn chọn ở lại và cùng em cố gắng. Dù có những lúc em muốn buông tay, thì ở đây, anh vẫn sẽ đứng chờ em. Vì anh biết chỉ có em là người duy nhất anh yêu, và là người duy nhất anh muốn cưới làm vợ. Con người ta ai cũng có thể thay đổi để hòa hợp với nhau hơn đúng không em? Chỉ cần tụi mình chân thành và tử tế với nhau, anh tin không gì là không thể vượt qua.',
     },
     admin: {
       uploading: 'Đang tải {done}/{total}…',
@@ -53,7 +55,7 @@ export const translations = {
     gate: {
       eyebrow: 'For you',
       title: 'Our Little Gallery',
-      prompt: 'Whisper the secret word.',
+      prompt: 'Whisper the secret word (it\'s her birthday).',
       passwordPlaceholder: '••••••••',
       wrongPassword: 'Incorrect password',
       unlocking: 'Unlocking…',

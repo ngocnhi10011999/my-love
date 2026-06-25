@@ -4,21 +4,26 @@ import {
   PutObjectCommand,
 } from '@aws-sdk/client-s3';
 
-const region = import.meta.env.VITE_AWS_REGION;
-const bucket = import.meta.env.VITE_AWS_S3_BUCKET;
+const endpoint = import.meta.env.VITE_S3_ENDPOINT;
+const region = import.meta.env.VITE_S3_REGION;
+const bucket = import.meta.env.VITE_S3_BUCKET;
 
 const s3 = new S3Client({
+  endpoint,
   region,
   credentials: {
-    accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY_ID,
-    secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY,
+    accessKeyId: import.meta.env.VITE_S3_ACCESS_KEY_ID,
+    secretAccessKey: import.meta.env.VITE_S3_SECRET_ACCESS_KEY,
   },
+  forcePathStyle: true,
 });
 
 const IMAGE_EXT = /\.(jpe?g|png|gif|webp|avif|bmp)$/i;
 
 function publicUrlFor(key) {
-  return `https://${bucket}.s3.${region}.amazonaws.com/${encodeURIComponent(key).replace(/%2F/g, '/')}`;
+  const base = endpoint.replace(/\/+$/, '');
+  const encodedKey = encodeURIComponent(key).replace(/%2F/g, '/');
+  return `${base}/${bucket}/${encodedKey}`;
 }
 
 export async function fetchGalleryImages() {

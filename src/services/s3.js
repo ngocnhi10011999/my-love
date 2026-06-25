@@ -16,6 +16,8 @@ const s3 = new S3Client({
     secretAccessKey: import.meta.env.VITE_S3_SECRET_ACCESS_KEY,
   },
   forcePathStyle: true,
+  requestChecksumCalculation: 'WHEN_REQUIRED',
+  responseChecksumValidation: 'WHEN_REQUIRED',
 });
 
 const IMAGE_EXT = /\.(jpe?g|png|gif|webp|avif|bmp)$/i;
@@ -44,12 +46,14 @@ export async function fetchGalleryImages() {
 
 export async function uploadImageToS3(file) {
   const key = `${Date.now()}-${file.name.replace(/\s+/g, '_')}`;
+  const body = new Uint8Array(await file.arrayBuffer());
   await s3.send(
     new PutObjectCommand({
       Bucket: bucket,
       Key: key,
-      Body: file,
+      Body: body,
       ContentType: file.type || 'application/octet-stream',
+      ContentLength: body.byteLength,
     }),
   );
   return { key, url: publicUrlFor(key) };

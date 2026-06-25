@@ -1,7 +1,10 @@
+import { useI18n } from '../i18n/I18nContext.jsx';
 import Fancybox from './Fancybox.jsx';
 import Heart from './Heart.jsx';
 
 export default function GalleryGrid({ images, loading, error }) {
+  const { t } = useI18n();
+
   if (loading) {
     return (
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
@@ -15,7 +18,7 @@ export default function GalleryGrid({ images, loading, error }) {
   if (error) {
     return (
       <div className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-rose-700">
-        Failed to load images: {error}
+        {t('gallery.loadError', { error })}
       </div>
     );
   }
@@ -24,7 +27,7 @@ export default function GalleryGrid({ images, loading, error }) {
     return (
       <div className="rounded-2xl border border-rose-200 bg-white/70 p-12 text-center text-rose-500 flex flex-col items-center gap-3">
         <Heart className="w-10 h-10 text-rose-300" />
-        <p>No memories here yet.</p>
+        <p>{t('gallery.empty')}</p>
       </div>
     );
   }

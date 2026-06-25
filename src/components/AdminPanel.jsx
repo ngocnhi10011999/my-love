@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { fetchGalleryImages, uploadImageToS3 } from '../services/s3.js';
+import { useI18n } from '../i18n/I18nContext.jsx';
 import GalleryGrid from './GalleryGrid.jsx';
 import Heart from './Heart.jsx';
 
 export default function AdminPanel() {
+  const { t } = useI18n();
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -57,8 +59,8 @@ export default function AdminPanel() {
         >
           <Heart className="w-4 h-4" />
           {uploading
-            ? `Uploading ${progress.done}/${progress.total}…`
-            : 'Add memories'}
+            ? t('admin.uploading', { done: progress.done, total: progress.total })
+            : t('admin.addMemories')}
           <input
             type="file"
             multiple
@@ -73,10 +75,10 @@ export default function AdminPanel() {
           disabled={loading || uploading}
           className="px-4 py-2 rounded-full bg-white border border-rose-200 hover:bg-rose-50 text-rose-700 disabled:opacity-50 transition"
         >
-          Refresh
+          {t('admin.refresh')}
         </button>
         <span className="text-sm text-rose-500 ml-auto">
-          {images.length} {images.length === 1 ? 'memory' : 'memories'}
+          {t('admin.count', { count: images.length })}
         </span>
       </div>
 

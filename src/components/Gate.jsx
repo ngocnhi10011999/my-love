@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext.jsx';
 import { triggerTelegramAlert } from '../services/telegram.js';
+import Heart from './Heart.jsx';
 
 export default function Gate() {
   const { login } = useAuth();
@@ -28,25 +29,30 @@ export default function Gate() {
     <div className="min-h-screen flex items-center justify-center px-4">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-sm rounded-2xl bg-white border border-slate-200 p-8 shadow-xl"
+        className="w-full max-w-sm rounded-3xl bg-white/80 backdrop-blur border border-rose-200 p-8 shadow-2xl shadow-rose-200/50"
       >
-        <h1 className="text-2xl font-semibold mb-2 text-slate-900">Secure Gallery</h1>
-        <p className="text-sm text-slate-500 mb-6">Enter your access password.</p>
+        <div className="flex items-center gap-2 text-rose-500 mb-3">
+          <Heart className="w-7 h-7 animate-pulse" />
+          <span className="text-xs uppercase tracking-widest font-semibold">For you</span>
+        </div>
+        <h1 className="text-3xl font-serif italic text-rose-900 mb-2">Our Little Gallery</h1>
+        <p className="text-sm text-rose-700/70 mb-6">Whisper the secret word.</p>
         <input
           type="password"
           autoFocus
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          className="w-full px-4 py-3 rounded-lg bg-white border border-slate-300 text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+          placeholder="••••••••"
+          className="w-full px-4 py-3 rounded-xl bg-white border border-rose-200 text-rose-950 placeholder-rose-300 focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-200"
         />
         {error && <p className="mt-3 text-sm text-rose-600">{error}</p>}
         <button
           type="submit"
           disabled={busy || !password}
-          className="mt-6 w-full py-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-medium transition"
+          className="mt-6 w-full py-3 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 disabled:from-rose-200 disabled:to-pink-200 disabled:cursor-not-allowed text-white font-medium shadow-lg shadow-rose-300/50 transition flex items-center justify-center gap-2"
         >
-          {busy ? 'Unlocking…' : 'Unlock'}
+          <Heart className="w-4 h-4" />
+          {busy ? 'Unlocking…' : 'Open the gallery'}
         </button>
       </form>
     </div>

@@ -36,7 +36,7 @@ export default function GalleryGrid({ images, loading, error }) {
             href={img.url}
             data-fancybox="gallery"
             data-caption={img.key}
-            className="group block aspect-square overflow-hidden rounded-lg bg-slate-100"
+            className="group block aspect-square overflow-hidden rounded-lg border border-slate-200 bg-slate-100 shadow-sm hover:shadow-md hover:border-slate-300 transition"
           >
             <img
               src={img.url}

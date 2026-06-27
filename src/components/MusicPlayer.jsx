@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useI18n } from '../i18n/I18nContext.jsx';
 
 const STORAGE_KEY = 'secure-gallery:muted';
-const SRC = '/music.mp3';
+const SRC = '/audio.mp3';
 
 export default function MusicPlayer() {
   const { t } = useI18n();

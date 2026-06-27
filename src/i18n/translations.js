@@ -20,9 +20,10 @@ export const translations = {
       eyebrow: 'Một góc nhỏ của hai đứa',
       title: 'Mỗi tấm ảnh là một nhịp tim.',
       // subtitle:
-      // 'Một nơi yên tĩnh để lưu giữ những khoảnh khắc đáng nhớ — những buổi sáng dịu dàng, những nụ cười trộm, những điều mãi mãi bé nhỏ của đời thường.',
+      // 'Bốn năm bên nhau, tụi mình không còn những cuồng nhiệt thuở ban đầu, và những giận hờn, cãi vã cũng là điều khó tránh. Anh biết có những lúc cả hai đều cảm thấy mệt mỏi. Nhưng anh muốn em biết rằng, tình yêu anh dành cho em chưa bao giờ thay đổi. Chính vì người đó là em, nên dù có thế nào, anh vẫn luôn chọn ở lại và cùng em cố gắng. Dù có những lúc em muốn buông tay, thì ở đây, anh vẫn sẽ đứng chờ em. Vì anh biết chỉ có em là người duy nhất anh yêu, và là người duy nhất anh muốn cưới làm vợ. Con người ta ai cũng có thể thay đổi để hòa hợp với nhau hơn đúng không em? Chỉ cần tụi mình chân thành và tử tế với nhau, anh tin không gì là không thể vượt qua.',
       subtitle:
-        'Bốn năm bên nhau, tụi mình không còn những cuồng nhiệt thuở ban đầu, và những giận hờn, cãi vã cũng là điều khó tránh. Anh biết có những lúc cả hai đều cảm thấy mệt mỏi. Nhưng anh muốn em biết rằng, tình yêu anh dành cho em chưa bao giờ thay đổi. Chính vì người đó là em, nên dù có thế nào, anh vẫn luôn chọn ở lại và cùng em cố gắng. Dù có những lúc em muốn buông tay, thì ở đây, anh vẫn sẽ đứng chờ em. Vì anh biết chỉ có em là người duy nhất anh yêu, và là người duy nhất anh muốn cưới làm vợ. Con người ta ai cũng có thể thay đổi để hòa hợp với nhau hơn đúng không em? Chỉ cần tụi mình chân thành và tử tế với nhau, anh tin không gì là không thể vượt qua.',
+        'Chúng ta có thể bên cạnh nhau nữa không, nếu em quay về anh bằng lòng ngóng trông. Lỡ yêu em nhiều không bận tâm đúng sai, chẳng thể nào yêu một ai mà không phải em. Không muốn tương lai đôi ta lại chẳng có nhau ngày người rời tay, tình yêu vẫn còn nguyên vẹn ... 🎵. ' +
+        'Xin lỗi em vì tất cả, anh chờ ngày em tha thứ và quay về với anh. ',
     },
     admin: {
       uploading: 'Đang tải {done}/{total}…',
@@ -97,7 +98,7 @@ export const translations = {
     music: {
       mute: 'Mute music',
       unmute: 'Unmute music',
-      tapToPlay: 'Tap the screen to play music ♥',
+      tapToPlay: 'Tap the screen to play music ♥'
     },
   },
 };

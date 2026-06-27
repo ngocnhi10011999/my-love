@@ -49,6 +49,7 @@ export const translations = {
     music: {
       mute: 'Tắt nhạc',
       unmute: 'Bật nhạc',
+      tapToPlay: 'Chạm vào màn hình để nghe nhạc ♥',
     },
   },
   en: {
@@ -96,6 +97,7 @@ export const translations = {
     music: {
       mute: 'Mute music',
       unmute: 'Unmute music',
+      tapToPlay: 'Tap the screen to play music ♥',
     },
   },
 };

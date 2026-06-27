@@ -9,6 +9,7 @@ export default function MusicPlayer() {
   const audioRef = useRef(null);
   const [muted, setMuted] = useState(() => localStorage.getItem(STORAGE_KEY) === '1');
   const [playing, setPlaying] = useState(false);
+  const [needsGesture, setNeedsGesture] = useState(false);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -19,10 +20,17 @@ export default function MusicPlayer() {
 
     const tryPlay = () => {
       audio.play().then(
-        () => setPlaying(true),
         () => {
+          setPlaying(true);
+          setNeedsGesture(false);
+        },
+        () => {
+          setNeedsGesture(true);
           const startOnGesture = () => {
-            audio.play().then(() => setPlaying(true)).catch(() => {});
+            audio.play().then(() => {
+              setPlaying(true);
+              setNeedsGesture(false);
+            }).catch(() => {});
             window.removeEventListener('pointerdown', startOnGesture);
             window.removeEventListener('keydown', startOnGesture);
           };
@@ -46,6 +54,16 @@ export default function MusicPlayer() {
   return (
     <>
       <audio ref={audioRef} src={SRC} preload="auto" />
+      {needsGesture && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-20 right-5 z-20 max-w-[80vw] px-4 py-2.5 rounded-full bg-white/95 backdrop-blur border border-rose-200 text-sm text-rose-700 shadow-lg shadow-rose-200/60 flex items-center gap-2 animate-pulse"
+        >
+          <span aria-hidden="true">👆</span>
+          <span>{t('music.tapToPlay')}</span>
+        </div>
+      )}
       <button
         type="button"
         onClick={() => setMuted((m) => !m)}
